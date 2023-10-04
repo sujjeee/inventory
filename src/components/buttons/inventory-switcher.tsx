@@ -64,7 +64,6 @@ export default function InventorySwitcher({ className }: InventorySwitcherProps)
     groups[0]
   )
 
-
   const { data: getInventory, isLoading: isFetching } = trpc.getInventory.useQuery(undefined, {
     onSuccess: (data) => {
       setGroups(data)

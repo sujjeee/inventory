@@ -4,11 +4,12 @@ import { UserButton } from "@clerk/nextjs";
 import { ArrowRight, Home, Link } from "lucide-react";
 import { Button, buttonVariants } from "../ui/button";
 import InventorySwitcher from "../buttons/inventory-switcher";
+import { ThemeToggle } from "../buttons/theme-toggle";
 
 export function Header() {
     const user = true;
     return (
-        <div className='sticky h-14 inset-x-0 top-0 z-30 w-full  bg-white/75 backdrop-blur-lg transition-all'>
+        <div className='sticky h-14 inset-x-0 top-0 z-30 w-full'>
             <div className='flex h-14 items-center justify-between '>
                 {user ? (
                     <InventorySwitcher />
@@ -39,15 +40,7 @@ export function Header() {
                         </>
                     ) : (
                         <>
-                            <Link
-                                href='/dashboard'
-                                className={buttonVariants({
-                                    variant: 'ghost',
-                                    size: 'sm',
-                                })}>
-                                Dashboard
-                            </Link>
-
+                            <ThemeToggle />
                             <UserButton />
                         </>
                     )}
