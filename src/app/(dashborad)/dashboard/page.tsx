@@ -1,3 +1,4 @@
+import { Header } from '@/components/layout/header'
 import { Shell } from '@/components/shells'
 import { DataTableShell } from '@/components/shells/data-table-shell'
 import { db } from '@/db'
@@ -73,7 +74,8 @@ export default async function Dashboard({ searchParams }: IndexPageProps) {
 
     return (
         <>
-            <Shell className="max-w-6xl w-full " >
+            <Shell className="max-w-6xl w-full" >
+                <Header />
                 <DataTableShell data={allTasks} pageCount={pageCount} />
             </Shell>
         </>

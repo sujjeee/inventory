@@ -15,7 +15,7 @@ interface DataTableLoadingProps {
 
 export function DataTableLoading({
     columnCount,
-    rowCount = 10,
+    rowCount = 5,
 }: DataTableLoadingProps) {
     return (
         <div className="w-full space-y-3 overflow-auto">

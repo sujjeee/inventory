@@ -17,18 +17,17 @@ model User {
 }
 
 model Inventory {
-  id          String  @id @default(cuid())
-  name        String
-  description String?
-  userId      String
-  user        User    @relation(fields: [userId], references: [id])
-  tasks       Task[]
+  id     String @id @default(cuid())
+  name   String
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  tasks  Task[]
 }
 
 model Task {
   id          String     @id @default(cuid())
+  task        String
   title       String
-  description String?
   status      TaskStatus @default(Todo)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt

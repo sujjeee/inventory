@@ -4,13 +4,16 @@ import type {
     DataTableFilterableColumn,
     DataTableSearchableColumn,
 } from "@/types"
-import { Cross2Icon } from "@radix-ui/react-icons"
+import { Cross2Icon, PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons"
 import type { Table } from "@tanstack/react-table"
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTableFacetedFilter } from "@/components/table/data-table-faceted-filter"
 import { DataTableViewOptions } from "@/components/table/data-table-view-option"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
+import AddNewTask from "../buttons/add-new-task"
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>
@@ -24,6 +27,7 @@ export function DataTableToolbar<TData>({
     searchableColumns = [],
 }: DataTableToolbarProps<TData>) {
     const isFiltered = table.getState().columnFilters.length > 0
+    const deleteRowsAction = true
 
     return (
         <div className="flex items-center justify-between py-1.5">
@@ -72,7 +76,29 @@ export function DataTableToolbar<TData>({
                     </Button>
                 )}
             </div>
-            <DataTableViewOptions table={table} />
+            <div className="flex items-center space-x-2">
+                {deleteRowsAction && table.getSelectedRowModel().rows.length > 0 ? (
+                    <Button
+                        aria-label="Delete selected rows"
+                        variant="outline"
+                        size="sm"
+                        className="h-8"
+                    // onClick={(event) => {
+                    //   startTransition(() => {
+                    //     table.toggleAllPageRowsSelected(false)
+                    //     deleteRowsAction(event)
+                    //   })
+                    // }}
+                    // disabled={isPending}
+                    >
+                        <TrashIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+                        Delete
+                    </Button>
+                ) : (
+                    <AddNewTask />
+                )}
+                <DataTableViewOptions table={table} />
+            </div>
         </div>
     )
 }

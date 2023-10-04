@@ -40,39 +40,36 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { trpc } from "@/app/_trpc/client"
-import { Icons } from "../icons"
-import { Skeleton } from "../ui/skeleton"
+import { Icons } from "@/components/icons"
+import { Skeleton } from "@/components/ui/skeleton"
 import { inferRouterOutputs } from "@trpc/server"
 import { AppRouter } from "@/trpc"
 
 type RouterOutput = inferRouterOutputs<AppRouter>
-
 type Inventory = RouterOutput['getInventory']
-
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
-
 interface InventorySwitcherProps extends PopoverTriggerProps { }
 
 export default function InventorySwitcher({ className }: InventorySwitcherProps) {
-  const [groups, setGroups] = React.useState<Inventory>([]);
-
-
+  const [inventory, setInventory] = React.useState<Inventory>([]);
   const [open, setOpen] = React.useState(false)
   const [inventoryName, setInventoryName] = React.useState<string>('')
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false)
   const [selectedTeam, setSelectedTeam] = React.useState<any>(
-    groups[0]
+    inventory[0]
   )
-
   const { data: getInventory, isLoading: isFetching } = trpc.getInventory.useQuery(undefined, {
     onSuccess: (data) => {
-      setGroups(data)
+      if (data.length > 0) {
+        console.log("selectedTeam before", selectedTeam)
+        setInventory(data)
+        setSelectedTeam(data[0]);
+        console.log("selectedTeam after", selectedTeam)
+      }
+
     }
   })
   const { mutate: createInventory, isLoading: iscreating } = trpc.createInventory.useMutation();
-
-
-  console.log("selectedTeam anme", selectedTeam)
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -83,7 +80,7 @@ export default function InventorySwitcher({ className }: InventorySwitcherProps)
             role="combobox"
             aria-expanded={open}
             aria-label="Select a team"
-            className={cn("w-[200px] justify-between", className)}
+            className={cn("w-[200px] h-max justify-between", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
@@ -92,7 +89,7 @@ export default function InventorySwitcher({ className }: InventorySwitcherProps)
               />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
-            {selectedTeam?.name || "Inventory"}
+            {selectedTeam?.name || "Test"}
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>

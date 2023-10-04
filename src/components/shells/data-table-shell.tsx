@@ -177,10 +177,8 @@ export function DataTableShell({ data, pageCount }: TasksShellProps) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-[160px]">
                             <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Status</DropdownMenuItem>
-                            <DropdownMenuSeparator />
                             <DropdownMenuSub>
-                                <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+                                <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
                                 <DropdownMenuSubContent>
                                     <DropdownMenuRadioGroup
                                         value={row.original.status}
