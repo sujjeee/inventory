@@ -1,7 +1,8 @@
-import { publicProcedure, router } from './trpc';
+import { privateProcedure, publicProcedure, router } from './trpc';
 import { TRPCError } from '@trpc/server';
 import { db } from '@/db';
 import { currentUser } from "@clerk/nextjs";
+import { z } from 'zod'
 
 export const appRouter = router({
     authCallback: publicProcedure.query(async () => {
@@ -25,6 +26,38 @@ export const appRouter = router({
             })
         }
         return { success: true }
+    }),
+
+    createInventory: privateProcedure
+        .input(
+            z.object({
+                name: z.string(),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+            const { userId } = ctx;
+
+            const newTodo = await db.inventory.create({
+                data: {
+                    name: input.name,
+                    userId
+                },
+            })
+
+            return newTodo;
+        }),
+
+    getInventory: privateProcedure.query(async ({ ctx }) => {
+        const { userId } = ctx
+        return await db.inventory.findMany({
+            where: {
+                userId
+            },
+            select: {
+                id: true,
+                name: true
+            }
+        })
     }),
 });
 

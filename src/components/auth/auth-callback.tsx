@@ -18,7 +18,7 @@ export default function AuthCallback() {
         },
         onError: (err) => {
             if (err.data?.code === 'UNAUTHORIZED') {
-                router.push('/sign-in')
+                router.push('/signin')
             }
         },
         retry: true,
