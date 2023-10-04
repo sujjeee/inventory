@@ -1,14 +1,11 @@
 import { type Metadata } from "next"
-import Link from "next/link"
 import { redirect } from "next/navigation"
-import { env } from "@/env.mjs"
 import { currentUser } from "@clerk/nextjs"
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"

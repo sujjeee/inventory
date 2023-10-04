@@ -21,7 +21,6 @@ export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
             className="flex items-center justify-center"
         >
             <Icons.spinner className="h-16 w-16 animate-spin" aria-hidden="true" />
-            Authenticating user
         </div>
     )
 }

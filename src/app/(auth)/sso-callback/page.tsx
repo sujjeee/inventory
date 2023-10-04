@@ -11,7 +11,7 @@ export default function SSOCallbackPage({
     searchParams,
 }: SSOCallbackPageProps) {
     return (
-        <Shell className="max-w-lg">
+        <Shell className="max-w-lg" variant={"centered"}>
             <SSOCallback searchParams={searchParams} />
         </Shell>
     )
