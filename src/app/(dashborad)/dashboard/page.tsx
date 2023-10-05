@@ -13,7 +13,7 @@ interface IndexPageProps {
 }
 
 export default async function Dashboard({ searchParams }: IndexPageProps) {
-    const { page, per_page, sort, title, status } = searchParams
+    const { id, page, per_page, sort, title, status } = searchParams
 
     const limit = typeof per_page === "string" ? parseInt(per_page) : 10
 

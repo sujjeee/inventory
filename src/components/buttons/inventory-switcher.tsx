@@ -44,6 +44,7 @@ import { Icons } from "@/components/icons"
 import { Skeleton } from "@/components/ui/skeleton"
 import { inferRouterOutputs } from "@trpc/server"
 import { AppRouter } from "@/trpc"
+import { useRouter } from "next/navigation"
 
 type RouterOutput = inferRouterOutputs<AppRouter>
 type Inventory = RouterOutput['getInventory']
@@ -51,6 +52,9 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 interface InventorySwitcherProps extends PopoverTriggerProps { }
 
 export default function InventorySwitcher({ className }: InventorySwitcherProps) {
+
+  const router = useRouter()
+
   const [inventory, setInventory] = React.useState<Inventory>([]);
   const [open, setOpen] = React.useState(false)
   const [inventoryName, setInventoryName] = React.useState<string>('')
@@ -61,10 +65,9 @@ export default function InventorySwitcher({ className }: InventorySwitcherProps)
   const { data: getInventory, isLoading: isFetching } = trpc.getInventory.useQuery(undefined, {
     onSuccess: (data) => {
       if (data.length > 0) {
-        console.log("selectedTeam before", selectedTeam)
         setInventory(data)
         setSelectedTeam(data[0]);
-        console.log("selectedTeam after", selectedTeam)
+        router.push(`/dashboard?id=${data[0].id}`);
       }
 
     }

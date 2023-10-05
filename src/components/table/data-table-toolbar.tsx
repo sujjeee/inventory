@@ -4,15 +4,13 @@ import type {
     DataTableFilterableColumn,
     DataTableSearchableColumn,
 } from "@/types"
-import { Cross2Icon, PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons"
+import { Cross2Icon, TrashIcon } from "@radix-ui/react-icons"
 import type { Table } from "@tanstack/react-table"
 
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTableFacetedFilter } from "@/components/table/data-table-faceted-filter"
 import { DataTableViewOptions } from "@/components/table/data-table-view-option"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
 import AddNewTask from "../buttons/add-new-task"
 
 interface DataTableToolbarProps<TData> {
