@@ -15,6 +15,8 @@ interface IndexPageProps {
 export default async function Dashboard({ searchParams }: IndexPageProps) {
     const { id, page, per_page, sort, title, status } = searchParams
 
+    const idString = typeof id === 'string' ? id : undefined;
+
     const limit = typeof per_page === "string" ? parseInt(per_page) : 10
 
     const skip = typeof page === "string"
@@ -75,7 +77,7 @@ export default async function Dashboard({ searchParams }: IndexPageProps) {
     return (
         <>
             <Shell className="max-w-6xl w-full" >
-                <Header />
+                <Header inventoryID={idString} />
                 <DataTableShell data={allTasks} pageCount={pageCount} />
             </Shell>
         </>

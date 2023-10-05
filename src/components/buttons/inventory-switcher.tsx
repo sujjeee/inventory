@@ -49,10 +49,13 @@ import { useRouter } from "next/navigation"
 type RouterOutput = inferRouterOutputs<AppRouter>
 type Inventory = RouterOutput['getInventory']
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
-interface InventorySwitcherProps extends PopoverTriggerProps { }
+interface InventorySwitcherProps extends PopoverTriggerProps {
+  id: string | undefined
+}
 
-export default function InventorySwitcher({ className }: InventorySwitcherProps) {
+export default function InventorySwitcher({ className, id }: InventorySwitcherProps) {
 
+  console.log("id form search paramas", id)
   const router = useRouter()
 
   const [inventory, setInventory] = React.useState<Inventory>([]);
@@ -67,12 +70,19 @@ export default function InventorySwitcher({ className }: InventorySwitcherProps)
       if (data.length > 0) {
         setInventory(data)
         setSelectedTeam(data[0]);
-        router.push(`/dashboard?id=${data[0].id}`);
+        if (!id) {
+          router.push(`/dashboard?id=${data[0].id}`);
+        }
       }
 
     }
   })
   const { mutate: createInventory, isLoading: iscreating } = trpc.createInventory.useMutation();
+
+  function getNameById(id: any) {
+    const item = inventory.find(item => item.id === id);
+    return item ? item.name : 'Not Found';
+  }
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -92,7 +102,7 @@ export default function InventorySwitcher({ className }: InventorySwitcherProps)
               />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
-            {selectedTeam?.name || "Test"}
+            {getNameById(id) || selectedTeam?.name || "Test"}
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -113,6 +123,7 @@ export default function InventorySwitcher({ className }: InventorySwitcherProps)
                           onSelect={() => {
                             setSelectedTeam(group)
                             setOpen(false)
+                            router.push(`/dashboard?id=${group.id}`)
                           }}
                           className="text-sm"
                         >
