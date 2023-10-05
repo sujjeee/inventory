@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTableFacetedFilter } from "@/components/table/data-table-faceted-filter"
 import { DataTableViewOptions } from "@/components/table/data-table-view-option"
-import AddNewTask from "../buttons/add-new-task"
+import AddNewTaskButton from "../buttons/add-new-button"
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>
@@ -75,26 +75,7 @@ export function DataTableToolbar<TData>({
                 )}
             </div>
             <div className="flex items-center space-x-2">
-                {deleteRowsAction && table.getSelectedRowModel().rows.length > 0 ? (
-                    <Button
-                        aria-label="Delete selected rows"
-                        variant="outline"
-                        size="sm"
-                        className="h-8"
-                    // onClick={(event) => {
-                    //   startTransition(() => {
-                    //     table.toggleAllPageRowsSelected(false)
-                    //     deleteRowsAction(event)
-                    //   })
-                    // }}
-                    // disabled={isPending}
-                    >
-                        <TrashIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-                        Delete
-                    </Button>
-                ) : (
-                    <AddNewTask />
-                )}
+                <AddNewTaskButton />
                 <DataTableViewOptions table={table} />
             </div>
         </div>
