@@ -77,6 +77,7 @@ export default function InventorySwitcher({ className, id }: InventorySwitcherPr
 
     }
   })
+
   const { mutate: createInventory, isLoading: iscreating } = trpc.createInventory.useMutation();
 
   function getNameById(id: any) {

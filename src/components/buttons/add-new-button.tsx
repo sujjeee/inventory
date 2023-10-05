@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog"
 import { cn } from '@/lib/utils'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { AddNewTaskForm } from '../forms/add-new-task-forms'
+import AddNewTaskForm from '../form/add-new-task-form'
 
 export default function AddNewTaskButton() {
     return (

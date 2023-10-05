@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AddTaskForm } from '../forms/add-task-form'
 import { cn } from '@/lib/utils'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
 
@@ -39,7 +38,6 @@ export default function AddNewTask() {
                         Enter the details of your new item.
                     </DialogDescription>
                 </DialogHeader>
-                <AddTaskForm />
             </DialogContent>
         </Dialog>
     )

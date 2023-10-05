@@ -87,6 +87,32 @@ export const appRouter = router({
 
             return newTodo;
         }),
+    updateStatus: privateProcedure
+        .input(
+            z.object({
+                inventoryId: z.string(),
+                id: z.string().min(1, {
+                    message: "Must be at least 1 character",
+                }),
+                status: z.enum(Object.values(TaskStatus) as [keyof typeof TaskStatus], {
+                    required_error: "Must be a valid category",
+                })
+            })
+        )
+        .mutation(async ({ input }) => {
+
+            const newTodo = await db.task.update({
+                where: {
+                    id: input.id,
+                    inventoryId: input.inventoryId
+                },
+                data: {
+                    status: input.status
+                },
+            })
+
+            return newTodo;
+        }),
 
     getInventoryTask: privateProcedure
         .input(

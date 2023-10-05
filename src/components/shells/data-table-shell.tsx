@@ -29,6 +29,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { DataTableColumnHeader } from "../table/data-table-column-header";
+import { useSearchParams } from "next/navigation";
+import { trpc } from "@/app/_trpc/client";
 
 
 const status: {
@@ -60,7 +62,10 @@ interface TasksShellProps {
 
 export function DataTableShell({ data, pageCount }: TasksShellProps) {
 
-    const [isPending, startTransition] = React.useTransition()
+    const searchParams = useSearchParams()
+    const id = searchParams.get('id')
+
+    const { mutate: updateStatus, isLoading: isUpdating } = trpc.updateStatus.useMutation();
 
     // Memoize the columns so they don't re-render on every render
     const columns = React.useMemo<ColumnDef<Task, unknown>[]>(
@@ -182,20 +187,19 @@ export function DataTableShell({ data, pageCount }: TasksShellProps) {
                                 <DropdownMenuSubContent>
                                     <DropdownMenuRadioGroup
                                         value={row.original.status}
-                                    // onValueChange={(value) => {
-                                    //     startTransition(async () => {
-                                    //         await updateTaskLabelAction({
-                                    //             id: row.original.id,
-                                    //             label: value as Task["status"],
-                                    //         })
-                                    //     })
-                                    // }}
+                                        onValueChange={(value) => {
+                                            updateStatus({
+                                                inventoryId: id!,
+                                                id: row.original.id,
+                                                status: value as Task["status"]
+                                            })
+                                        }}
                                     >
                                         {status.map((label) => (
                                             <DropdownMenuRadioItem
                                                 key={label.value}
                                                 value={label.value}
-                                                disabled={isPending}
+                                                disabled={isUpdating}
                                             >
                                                 {label.label}
                                             </DropdownMenuRadioItem>
@@ -213,7 +217,7 @@ export function DataTableShell({ data, pageCount }: TasksShellProps) {
                 ),
             },
         ],
-        [isPending]
+        [isUpdating]
 
     )
     return (

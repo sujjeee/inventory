@@ -40,6 +40,7 @@ export default async function Dashboard({ searchParams }: IndexPageProps) {
             take: limit,
             skip: skip,
             where: {
+                inventoryId: idString,
                 title: typeof title === "string" ? { contains: title } : undefined,
                 status: statuses.length > 0 ? { in: statuses } : undefined,
             },
@@ -50,6 +51,7 @@ export default async function Dashboard({ searchParams }: IndexPageProps) {
 
         const totalTasks = await tx.task.count({
             where: {
+                inventoryId: idString,
                 title: typeof title === "string" ? { contains: title } : undefined,
                 status: statuses.length > 0 ? { in: statuses } : undefined,
             },
