@@ -26,6 +26,9 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
 import { taskSchema } from "@/lib/task"
+import { trpc } from "@/app/_trpc/client"
+import { useSearchParams } from 'next/navigation'
+import { Prisma } from "@prisma/client"
 
 type Inputs = z.infer<typeof taskSchema>
 
@@ -38,23 +41,26 @@ enum TaskStatus {
 
 export function AddNewTaskForm() {
     const [isPending, startTransition] = React.useTransition()
+    const searchParams = useSearchParams()
+    const id = searchParams.get('id')
 
-    const form = useForm<Inputs>({
+    const form = useForm<Prisma.InventoryCreateInput>({
         resolver: zodResolver(taskSchema),
         defaultValues: {
             status: "Todo",
         },
     })
 
-    function onSubmit(data: Inputs) {
-        startTransition(async () => {
+    const { mutate: createInventoryTask, isLoading: iscreating } = trpc.createInventoryTask.useMutation();
 
-            function myStopFunction() {
-                console.log("Simple2 form submitted")
-                console.log("submitted", data)
-                return "hello"
-            }
-            setTimeout(myStopFunction, 60000);
+    function onSubmit(data: Task) {
+        startTransition(async () => {
+            createInventoryTask({
+                name: data.task,
+                title: data.title,
+                status: data.status,
+                inventoryId: id!
+            })
         })
     }
 
