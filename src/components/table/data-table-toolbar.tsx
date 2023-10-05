@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTableFacetedFilter } from "@/components/table/data-table-faceted-filter"
 import { DataTableViewOptions } from "@/components/table/data-table-view-option"
+import AddNewTaskButton from "../buttons/add-new-button"
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>
@@ -72,7 +73,10 @@ export function DataTableToolbar<TData>({
                     </Button>
                 )}
             </div>
-            <DataTableViewOptions table={table} />
+            <div className="flex items-center space-x-2">
+                <AddNewTaskButton />
+                <DataTableViewOptions table={table} />
+            </div>
         </div>
     )
 }
