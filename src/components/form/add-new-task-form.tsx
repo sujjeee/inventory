@@ -43,6 +43,12 @@ export default function AddNewTaskForm() {
     onSuccess: async () => {
       toast.success("Created new task!")
       await revalidatePage()
+      // Reset the form fields to their initial state
+      setFormData({
+        task: '',
+        description: '',
+        status: 'Todo',
+      });
     },
   })
 
