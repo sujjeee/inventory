@@ -44,6 +44,10 @@ export const appRouter = router({
                     name: input.name,
                     userId
                 },
+                select: {
+                    id: true,
+                    name: true
+                }
             })
 
             return newTodo;
@@ -121,6 +125,7 @@ export const appRouter = router({
             })
         )
         .query(async ({ input }) => {
+            console.log("this is hitted")
             return await db.task.findMany({
                 where: {
                     inventoryId: input.inventoryId

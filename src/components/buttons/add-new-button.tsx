@@ -17,7 +17,7 @@ export default function AddNewTaskButton() {
         <Dialog>
             <DialogTrigger asChild>
                 <div
-                    className={cn(
+                    className={cn("cursor-pointer",
                         buttonVariants({
                             variant: "outline",
                             size: "sm",

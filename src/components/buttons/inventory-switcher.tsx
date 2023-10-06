@@ -55,7 +55,6 @@ interface InventorySwitcherProps extends PopoverTriggerProps {
 
 export default function InventorySwitcher({ className, id }: InventorySwitcherProps) {
 
-  console.log("id form search paramas", id)
   const router = useRouter()
 
   const [inventory, setInventory] = React.useState<Inventory>([]);
@@ -69,22 +68,34 @@ export default function InventorySwitcher({ className, id }: InventorySwitcherPr
     onSuccess: (data) => {
       if (data.length > 0) {
         setInventory(data)
-        setSelectedTeam(data[0]);
-        if (!id) {
-          router.push(`/dashboard?id=${data[0].id}`);
+        const matchingItem = data.find((item) => item.id === id);
+        if (matchingItem) {
+          setSelectedTeam(matchingItem);
+          router.push(`/dashboard?id=${matchingItem.id}`);
+          return; // Exit the function if a match is found
         }
+        setSelectedTeam(data[0]);
+        router.push(`/dashboard?id=${data[0].id}`);
       }
-
     }
   })
 
-  const { mutate: createInventory, isLoading: iscreating } = trpc.createInventory.useMutation();
+  const { mutate: createInventory, isLoading: iscreating } = trpc.createInventory.useMutation({
+    onSuccess: (data) => {
+      console.log("data form create invenroty", data)
+      if (data) {
+        setInventory((prevInventory) => [...prevInventory, data]);
+        setSelectedTeam(data);
+        router.push(`/dashboard?id=${data.id}`);
+        setShowNewTeamDialog(false)
+      }
+    }
+  });
 
   function getNameById(id: any) {
     const item = inventory.find(item => item.id === id);
     return item ? item.name : 'Not Found';
   }
-
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -117,7 +128,8 @@ export default function InventorySwitcher({ className, id }: InventorySwitcherPr
                   ? (<Skeleton className="h-8 w-full" />)
                   : (<>
                     {getInventory?.map((group) => {
-                      // console.log("groups", group.label)
+                      // console.log("groups", group.id)
+                      // console.log("selectedTeam?.id", selectedTeam?.id)
                       return (
                         <CommandItem
                           key={group.name}

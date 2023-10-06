@@ -10,8 +10,11 @@ import { Button } from '../ui/button'
 import { Icons } from '../icons'
 import { useSearchParams } from 'next/navigation'
 import { trpc } from '@/app/_trpc/client'
+import { toast } from 'sonner'
+import { revalidatePage } from '@/app/_action/revalidatePage'
 
 export default function AddNewTaskForm() {
+  const utils = trpc.useContext()
 
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
@@ -34,7 +37,14 @@ export default function AddNewTaskForm() {
     (key) => isNaN(Number(key))
   ) as [keyof typeof TaskStatus];
 
-  const { mutate: createInventoryTask, isLoading: iscreating } = trpc.createInventoryTask.useMutation();
+  // const { mutate: createInventoryTask, isLoading: iscreating } = trpc.createInventoryTask.useMutation();
+
+  const { mutate: createInventoryTask, isLoading: iscreating } = trpc.createInventoryTask.useMutation({
+    onSuccess: async () => {
+      toast.success("Created new task!")
+      await revalidatePage()
+    },
+  })
 
   return (
     <div className='space-y-6 py-2'>
