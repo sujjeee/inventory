@@ -10,7 +10,7 @@ export default async function Home() {
       {user ? (
         <>
           Hello {user.firstName} 👋
-          <Link href="/dashboard" className="underline text-blue-500">
+          <Link href="/dashboard?origin=dashboard" className="underline text-blue-500">
             Visit your dashboard.
           </Link>
         </>
