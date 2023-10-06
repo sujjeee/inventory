@@ -13,6 +13,19 @@ interface IndexPageProps {
 }
 
 export default async function Dashboard({ searchParams }: IndexPageProps) {
+
+    const user = await currentUser()
+
+    if (!user || !user.id) redirect('/auth-callback?origin=/')
+
+    const dbUser = await db.user.findFirst({
+        where: {
+            id: user.id
+        }
+    })
+
+    if (!dbUser) redirect('/auth-callback?origin=/')
+
     const { id, page, per_page, sort, title, status } = searchParams
 
     const idString = typeof id === 'string' ? id : undefined;
@@ -36,26 +49,40 @@ export default async function Dashboard({ searchParams }: IndexPageProps) {
 
     const { allTasks, totalTasks } = await db.$transaction(async (tx) => {
 
-        const allTasks = await tx.task.findMany({
+        const userInventory = await tx.user.findFirst({
+            where: {
+                id: user.id
+            },
+            select: {
+                inventories: {
+                    take: 1,
+                },
+            }
+        })
+        const inventoryID = idString ? idString : userInventory?.inventories[0]?.id
+
+        console.log("inventoryID", inventoryID)
+        const allTasks = inventoryID ? await tx.task.findMany({
             take: limit,
             skip: skip,
             where: {
-                inventoryId: idString,
+                inventoryId: inventoryID,
                 title: typeof title === "string" ? { contains: title } : undefined,
                 status: statuses.length > 0 ? { in: statuses } : undefined,
             },
             orderBy: {
                 [column ?? 'id']: order ?? 'desc',
             },
-        })
+        }) : []
 
-        const totalTasks = await tx.task.count({
+        const totalTasks = inventoryID ? await tx.task.count({
             where: {
-                inventoryId: idString,
+                inventoryId: inventoryID,
                 title: typeof title === "string" ? { contains: title } : undefined,
                 status: statuses.length > 0 ? { in: statuses } : undefined,
             },
-        })
+        }) : 0
+
         return {
             allTasks,
             totalTasks
@@ -64,24 +91,10 @@ export default async function Dashboard({ searchParams }: IndexPageProps) {
 
     const pageCount = Math.ceil(totalTasks / limit)
 
-    const user = await currentUser()
-
-    if (!user || !user.id) redirect('/auth-callback?origin=/')
-
-    const dbUser = await db.user.findFirst({
-        where: {
-            id: user.id
-        }
-    })
-
-    if (!dbUser) redirect('/auth-callback?origin=/')
-
     return (
-        <>
-            <Shell className="max-w-6xl w-full" >
-                <Header inventoryID={idString} />
-                <DataTableShell data={allTasks} pageCount={pageCount} />
-            </Shell>
-        </>
+        <Shell className="max-w-6xl w-full" >
+            <Header inventoryID={idString} />
+            <DataTableShell data={allTasks} pageCount={pageCount} />
+        </Shell>
     )
 }

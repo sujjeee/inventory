@@ -13,7 +13,7 @@ export default function AuthCallback() {
         onSuccess: ({ success }) => {
             if (success) {
                 // user is synced to db
-                router.push(origin ? `/${origin}` : '/')
+                router.push(origin ? `/${origin}` : '/dashboard')
             }
         },
         onError: (err) => {
