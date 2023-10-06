@@ -14,7 +14,6 @@ import { toast } from 'sonner'
 import { revalidatePage } from '@/app/_action/revalidatePage'
 
 export default function AddNewTaskForm() {
-  const utils = trpc.useContext()
 
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
